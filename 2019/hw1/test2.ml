@@ -1,41 +1,54 @@
-(* Exercise 2. iterator *)
+(* Exercise 2. iter *)
 open Ex2
 open Testlib
 
 module TestEx2: TestEx =
   struct
-    type testcase =
-      | ITERATOR of int * (int -> int) * string * (int -> int) * string * int * int
-      | ITERATOR_S of int * (string -> string) * string * (string -> string) * string * string * string
+    type 'a tc = int * ('a -> 'a) * string * 'a * 'a
+    and testcase =
+      | INT of int tc
+      | STRING of string tc
+      | FLOAT of float tc
+      | BOOL of bool tc
+      | INT_LIST of int list tc
+      | INT_QUADRAPLE of (int * int * int * int) tc
 
     let testcases: testcase list =
-      [ ITERATOR (3, (fun x -> 2 + x), "x -> 2 + x", (fun x -> 6 + x) , "x -> 6 + x", 0, 6)
-      ; ITERATOR (4, (fun x -> 2 * x), "x -> 2 * x", (fun x -> 16 * x), "x -> 16 * x", 1, 16)
-      ; ITERATOR (4, (fun x -> 10 * x), "x -> 10 * x", (fun x -> 10000 * x), "x -> 10000 * x", 2, 20000)
-      ; ITERATOR (0, (fun x -> 10 * x), "x -> 10 * x", (fun x -> x), "x -> x", 0, 0) (* 0 일 때는 항등함수를 반환하라고 했음 *)
-      ; ITERATOR_S (3, (fun x -> x ^ "o"), "x -> x ^ \"x\"", (fun x -> x ^ "ooo"), "x -> x ^ \"ooo\"", "I", "Iooo") (* integer 라고 안 했음 *)
-      ; ITERATOR_S (6, (fun x -> "0" ^ x), "x -> \"0\" ^ x", (fun x -> "000000" ^ x), "x -> \"000000\" ^ x", "2", "0000002")
+      [ INT (10, (fun x -> x + 1), "x -> x + 1", 0, 10)
+      ; INT (10, (fun x -> x + 4), "x -> x + 4", 100, 140)
+      ; INT (0, (fun x -> x + 3), "x -> x + 3", 300, 300)
+      ; STRING (10, (fun x -> x ^ "a"), "x -> x ^ \"a\"", "", "aaaaaaaaaa")
+      ; STRING (3, (fun x -> x ^ x), "x -> x ^ x", "a", "aaaaaaaa")
+      ; INT (10, (fun x -> x*2), "x -> 2*x", 1, 1024)
+      ; INT (0, (fun x -> x*x+x), "x -> x*x + x", 1234, 1234)
+      ; BOOL (123, (fun x -> not x), "x -> not x", true, false)
+      ; INT_LIST (3, List.tl, "List.tl", [2;3;4;5;6;7], [5;6;7])
+      ; INT_QUADRAPLE (5, (fun (x,y,z,w) -> (w,x,y,z)), "(x,y,z,w) -> (w,x,y,z)", (1,2,3,4), (4,1,2,3))
       ]
 
     let runner (tc: testcase): bool =
       match tc with
-      | ITERATOR (a, f, fs, ans, anss, example, result) -> (iter(a,f) example) = (ans example)
-      | ITERATOR_S (a, f, fs, ans, anss, example, result) -> (iter(a,f) example) = (ans example)
+      | INT(n, f, fs, x, ans) -> iter (n,f) x = ans
+      | STRING(n, f, fs, x, ans) -> iter (n,f) x = ans
+      | FLOAT(n, f, fs, x, ans) -> iter (n,f) x = ans
+      | BOOL(n, f, fs, x, ans) -> iter (n,f) x = ans
+      | INT_LIST(n, f, fs, x, ans) -> iter (n,f) x = ans
+      | INT_QUADRAPLE (n, f, fs, x, ans) -> iter (n,f) x = ans
+
+    let string_of_iqp (a,b,c,d) =
+      Printf.sprintf "(%d, %d, %d, %d)" a b c d
 
     let string_of_tc (tc: testcase): string * string * string =
+      let base = Printf.sprintf "iter (%d, %s) %s" in
+      let string_of_il = string_of_list string_of_int in
       match tc with
-      | ITERATOR (a, f, fs, ans, anss, example, result) ->
-          ( Printf.sprintf "iter(%d, %s) %d" a fs example
-          , string_of_int result
-          , string_of_int (iter(a,f) example)
-          )
-      | ITERATOR_S (a, f, fs, ans, anss, example, result) ->
-          ( Printf.sprintf "iter(%d, %s) %s" a fs example
-          , result
-          , (iter(a,f) example)
-          )
+      | INT(n, f, fs, x, ans) -> (base n fs (string_of_int x), string_of_int ans, string_of_int (iter(n,f) x))
+      | STRING(n, f, fs, x, ans) -> (base n fs x, ans, iter(n,f) x)
+      | FLOAT(n, f, fs, x, ans) -> (base n fs (string_of_float x), string_of_float ans, string_of_float (iter(n,f) x))
+      | BOOL(n, f, fs, x, ans) -> (base n fs (string_of_bool x), string_of_bool ans, string_of_bool (iter(n,f) x))
+      | INT_LIST(n, f, fs, x, ans) -> (base n fs (string_of_il x), string_of_il ans, string_of_il (iter(n,f) x))
+      | INT_QUADRAPLE(n, f, fs, x, ans) -> (base n fs (string_of_iqp x), string_of_iqp ans, string_of_iqp (iter(n,f) x))
   end
 
 open TestEx2
 let _ = wrapper testcases runner string_of_tc
-
