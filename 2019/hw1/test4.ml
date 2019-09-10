@@ -26,6 +26,7 @@ module TestEx4: TestEx =
       ; EVAL (IMPLY (FALSE, TRUE), true)
       ; EVAL (IMPLY (FALSE, FALSE), true)
       ; EVAL (LESS (NUM 1, NUM 2), true)
+      ; EVAL (LESS (NUM 1, NUM 1), false)
       ; EVAL (LESS (NUM 2, NUM 1), false)
       ; EVAL (LESS (NUM (-100), NUM (-200)), false)
       ; EVAL (LESS (NUM (-200), NUM (-100)), true)
