@@ -11,3 +11,9 @@ ex*.ml
 hw8
 .DS_Store
 _check
+
+k.ml
+run
+parser.ml
+parser.mli
+lexer.ml
