@@ -8,12 +8,12 @@
 - `examples/test<num>.ans` : 정답
 - `examples/test<num>.out` : 출력
 
-### 3-2, 3-3
+### 4-2, 4-3
 1. `exercises/` 폴더에 `ex2.txt`, `ex3.txt` 또는 `ex2.k-`, `ex3.k-` 파일을 작성합니다.
 2. `./check` 명령어를 통해 테스트케이스를 실행합니다.
 
 제출스펙과 마찬가지로 소스코드 마지막을
-3-2는
+4-2는
 ```
 ...
 in
@@ -21,11 +21,11 @@ let input := 0 in
 read input;
 write (numch(input))
 ```
-3-3은
+4-3은
 ```
 ...
 in
-2018
+2019
 ```
 로 끝내주시기 바랍니다.
 
@@ -137,3 +137,4 @@ K- 프로그램 안에서 `(*  *)` 로 주석을 사용할 수 있습니다.
 13 강동옥 <dokang@ropas.snu.ac.kr>
 15 최재승 <jschoi@ropas.snu.ac.kr>
 17 이동권 <dklee@ropas.snu.ac.kr>
+18 이동권, 배요한 <dklee, yhbae@ropas.snu.ac.kr>
